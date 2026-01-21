@@ -1,7 +1,9 @@
+import React from "react";
 import { Client, Account, ID } from "appwrite"
 import conf from "../conf/conf";
 
-class AuthService {
+
+export class AuthService {
     client = new Client();
     account;
 
@@ -37,15 +39,14 @@ class AuthService {
         }
     }
 
-    async getCurrentAccount() {
+    async getCurrentUser() {
         try {
-            const currentAccount = await this.account.get();
-            if(currentAccount) return currentAccount;
-            else return null;
-
+            return await this.account.get();
+            
         } catch (error) {
-            console.log("Appwrite Service :: getCurrentUser :: error", error);
+            console.log("Appwrite Service :: getCurrentUser :: error", error);    
         }
+        return null
     }
 
     async logout() {

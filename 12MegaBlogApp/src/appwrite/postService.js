@@ -23,6 +23,7 @@ export class Post {
         rowId: slug,
         data: {
           title,
+          slug,
           content,
           featuredImage,
           status,
@@ -39,13 +40,14 @@ export class Post {
       return await this.tablesDb.updateRow({
         databaseId: conf.appwriteDatabaseId,
         tableId: conf.appwriteTableId,
-        documentId: slug,
+        rowId: slug,
         data: {
           title,
+          slug: slug,
           content,
           featuredImage,
           status,
-        },
+        }
       });
     } catch (error) {
         console.log("postService :: updatePost :: error", error);
@@ -94,5 +96,5 @@ export class Post {
   }
 }
 
-const post = new Post();
-export default post;
+const postService = new Post();
+export default postService;

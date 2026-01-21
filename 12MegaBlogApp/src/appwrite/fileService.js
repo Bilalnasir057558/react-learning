@@ -15,10 +15,10 @@ export class FileService {
 
     async uploadFile(file) {
         try {
-            return await this.storage.updateFile({
+            return await this.storage.createFile({
                 bucketId: conf.appwriteBucketId,
                 fileId: ID.unique(),
-                name: file
+                file: file,
             })
             
         } catch (error) {
@@ -29,7 +29,11 @@ export class FileService {
 
     async deleteFile(fileId) {
         try {
-            return await this.storage.deleteFile({
+            if(!fileId) {
+                console.log("fileService :: deleteFile :: No fileId provided");
+                return false;
+            }
+            await this.storage.deleteFile({
                 bucketId: conf.appwriteBucketId,
                 fileId,
             });
@@ -41,19 +45,17 @@ export class FileService {
         }
     }
 
-    filePreview(fileId) {
+    getFilePreview(fileId) {
         try {
-            return this.storage.getFilePreview({
-            bucketId: conf.appwriteBucketId,
-            fileId,
-        });
+            return `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/preview?project=${conf.appwriteProjectId}`;
 
         } catch (error) {
             console.log("fileService :: filePreview :: error", error)
+            return null
         }
     }
 
 };
 
-const file = new FileService();
-export default file;
+const fileService = new FileService();
+export default fileService;
